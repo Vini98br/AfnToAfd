@@ -40,11 +40,12 @@ for child in root:
 
 validateAFN(AFNtransitions, AFNsymbols, AFNstates, AFNinitialState, AFNfinalStates)
 
-print('AFNtransitions:', AFNtransitions)
-print('AFNsymbols:', AFNsymbols)
-print('AFNstates:', AFNstates)
-print('AFNinitialState:', AFNinitialState)
-print('AFNfinalStates:', AFNfinalStates)
+print('=============AFN=============')
+print('AFN - Transitions:', AFNtransitions)
+print('AFN - Symbols:', AFNsymbols)
+print('AFN - States:', AFNstates)
+print('AFN - InitialState:', AFNinitialState)
+print('AFN - FinalStates:', AFNfinalStates)
 
 AFDtransitions = []
 AFDsymbols = AFNsymbols
@@ -61,12 +62,12 @@ for combinedStates in AFDstates:
     if(AFNfinalStates.__contains__(state)):
       AFDfinalStates.append(combinedStates)
 
-print('=====================')
-print('AFDtransitions:', AFDtransitions)
-print('AFDsymbols:', AFDsymbols)
-print('AFDstates:', AFDstates)
-print('AFDinitialState:', AFDinitialState)
-print('AFDfinalStates:', AFDfinalStates)
+print('\n=============AFD=============')
+print('AFD - Transitions:', AFDtransitions)
+print('AFD - Symbols:', AFDsymbols)
+print('AFD - States:', AFDstates)
+print('AFD - InitialState:', AFDinitialState)
+print('AFD - FinalStates:', AFDfinalStates)
 
 # Todo: AFDtransitions
 

@@ -8,16 +8,15 @@
     <State>q0</State>
     <State>q1</State>
     <State>q2</State>
-    <State>q3</State>
   </States>
   <Transitions>
     <Transition from="q0" symbol="a" to="q1" />
-    <Transition from="q0" symbol="b" to="q0" />
-    <Transition from="q1" symbol="a" to="q2" />
-    <Transition from="q2" symbol="b" to="q3" />
+    <Transition from="q1" symbol="b" to="q2" />
+    <Transition from="q1" symbol="b" to="q0" />
+    <Transition from="q2" symbol="a" to="q0" />
   </Transitions>
   <InitialState>q1</InitialState>
   <FinalState>
-    <State>q3</State>
+    <State>q1</State>
   </FinalState>
 </Automaton>
