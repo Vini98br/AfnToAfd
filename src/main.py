@@ -62,14 +62,28 @@ for combinedStates in AFDstates:
     if(AFNfinalStates.__contains__(state)):
       AFDfinalStates.append(combinedStates)
 
+for state in AFDstates:
+  for symbol in AFDsymbols:
+    transitionTo = []
+    for x in range(0, state.__len__()): 
+      for afnTransition in AFNtransitions:
+        if(afnTransition.get('from') == state[x] and afnTransition.get('symbol') == symbol):
+          transitionTo.append(afnTransition.get('to'))
+    transitionTo = list(dict.fromkeys(transitionTo)) # Retira elementos duplicados
+    AFDtransitions.append(
+      {
+        'from':state[0] if state.__len__()==1 else str(state).replace('\'', '').replace('[','(').replace(']',')'), 
+        'symbol':symbol, 
+        'to':transitionTo[0] if transitionTo.__len__()==1 else str(transitionTo).replace('\'', '').replace('[','(').replace(']',')')
+      }
+    )
+
 print('\n=============AFD=============')
 print('AFD - Transitions:', AFDtransitions)
 print('AFD - Symbols:', AFDsymbols)
 print('AFD - States:', AFDstates)
 print('AFD - InitialState:', AFDinitialState)
 print('AFD - FinalStates:', AFDfinalStates)
-
-# Todo: AFDtransitions
 
 AFDroot = ET.Element('Automaton')
 alphabet = ET.SubElement(AFDroot, 'Alphabet')
@@ -81,6 +95,8 @@ for state in AFDstates:
   ET.SubElement(states, 'State').text = str(state).replace('\'', '').replace('[','(').replace(']',')')
 
 transitions = ET.SubElement(AFDroot, 'Transitions')
+for transition in AFDtransitions:
+  ET.SubElement(transitions, 'Transition').attrib = transition
 
 initialState = ET.SubElement(AFDroot, 'InitialState').text = AFDinitialState
 
