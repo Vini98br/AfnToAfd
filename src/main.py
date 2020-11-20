@@ -11,6 +11,7 @@ AFNstates = []
 AFNinitialState = ''
 AFNfinalStates = []
 
+#Leitura e Armazenamento do XML
 for child in root:
   if(child.tag == 'Alphabet'):
     for symbol in child.findall('Symbol'):
@@ -38,6 +39,7 @@ for child in root:
       if(AFNsymbols.count(final.text) == 0):
         AFNfinalStates.append(final.text)
 
+#Valida o AFN inserido
 validateAFN(AFNtransitions, AFNsymbols, AFNstates, AFNinitialState, AFNfinalStates)
 
 print('=============AFN=============')
@@ -52,31 +54,36 @@ AFDsymbols = AFNsymbols
 AFDfinalStates = []
 AFDinitialState = AFNinitialState
 AFDstates = []
+
+#Faz a combinacao sem repeticao dos estados do AFN
 for x in range(1, AFNstates.__len__() + 1): 
   for y in list(itertools.combinations(AFNstates, r=x)):
     elem = list(y)
     AFDstates.append(elem)
 
+#Encontra os estados finais do AFD
 for combinedStates in AFDstates:
   for state in combinedStates:
     if(AFNfinalStates.__contains__(state)):
       AFDfinalStates.append(combinedStates)
 
+#Produz as transicoes do AFD a partir das transicoes do AFN
 for state in AFDstates:
   for symbol in AFDsymbols:
     transitionTo = []
     for x in range(0, state.__len__()): 
       for afnTransition in AFNtransitions:
         if(afnTransition.get('from') == state[x] and afnTransition.get('symbol') == symbol):
-          transitionTo.append(afnTransition.get('to'))
-    transitionTo = list(dict.fromkeys(transitionTo)) # Retira elementos duplicados
-    AFDtransitions.append(
-      {
-        'from':state[0] if state.__len__()==1 else str(state).replace('\'', '').replace('[','(').replace(']',')'), 
-        'symbol':symbol, 
-        'to':transitionTo[0] if transitionTo.__len__()==1 else str(transitionTo).replace('\'', '').replace('[','(').replace(']',')')
-      }
-    )
+          transitionTo.append(afnTransition.get('to'))    
+    if(transitionTo.__len__() > 0):
+      transitionTo = list(dict.fromkeys(transitionTo)) # Retira elementos duplicados
+      AFDtransitions.append(
+        {
+          'from':state[0] if state.__len__()==1 else str(state).replace('\'', '').replace('[','(').replace(']',')'), 
+          'symbol':symbol, 
+          'to':transitionTo[0] if transitionTo.__len__()==1 else str(transitionTo).replace('\'', '').replace('[','(').replace(']',')')
+        }
+      )
 
 print('\n=============AFD=============')
 print('AFD - Transitions:', AFDtransitions)
@@ -85,6 +92,7 @@ print('AFD - States:', AFDstates)
 print('AFD - InitialState:', AFDinitialState)
 print('AFD - FinalStates:', AFDfinalStates)
 
+#Escrita do AFD no XML
 AFDroot = ET.Element('Automaton')
 alphabet = ET.SubElement(AFDroot, 'Alphabet')
 for symbol in AFDsymbols:
